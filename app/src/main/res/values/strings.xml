@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Flavors Example</string>
+    <string name="logo_admob_description">AdMob logo</string>
+    <string name="logo_fbaudience_description">FBAudience logo</string>
+    <string name="logo_adcolony_description">AdColony logo</string>
+</resources>

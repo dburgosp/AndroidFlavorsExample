@@ -1,0 +1,64 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "com.davidburgosprieto.android.androidflavorsexample"
+        minSdkVersion 19
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    // Specifies the flavor dimensions you want to use. The order in which you
+    // list each dimension determines its priority, from highest to lowest,
+    // when Gradle merges variant sources and configurations. You must assign
+    // each product flavor you configure to one of the flavor dimensions.
+    flavorDimensions "adnetwork"
+
+    productFlavors {
+        adcolony {
+            dimension "adnetwork"
+        }
+        admob {
+            dimension "adnetwork"
+        }
+        fbaudience {
+            dimension "adnetwork"
+        }
+    }
+}
+
+ext {
+    supportVersion = '28.0.0'
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation "com.android.support:appcompat-v7:" + supportVersion
+    implementation "com.android.support:cardview-v7:" + supportVersion
+    implementation "com.android.support:recyclerview-v7:" + supportVersion
+
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    // AdMob
+    implementation 'com.google.android.gms:play-services-ads:17.1.1'
+
+    // AdColony
+    implementation 'com.adcolony:sdk:3.3.8'
+    implementation 'com.google.android.gms:play-services-ads-identifier:16.0.0'
+
+    // FBAudience
+    implementation 'com.facebook.android:audience-network-sdk:5.+'
+}

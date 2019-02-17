@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="logo_admob_description">AdMob logo</string>
+    <string name="logo_fbaudience_description">FBAudience logo</string>
+    <string name="logo_adcolony_description">AdColony logo</string>
+    <string name="no_network_data">No hay datos de registro a esta red.</string>
+    <string name="network_data">Último registro: %s</string>
+    <string name="registered">REGISTRADA</string>
+    <string name="toast_registered">Guardado el estado de registro a la red.</string>
+    <string name="toast_not_registered">No estás registrado a esta red.</string>
+    <string name="click_to_save">Clic aquí para guardar el estado.</string>
+    <string name="not_loaded">El anuncio aún no se ha cargado.</string>
+
+    <!-- Keys for SharedPreferences -->
+    <string name="preferences_admob_status_key">ADMOB_STATUS_KEY</string>
+    <string name="preferences_adcolony_status_key">ADCOLONY_STATUS_KEY</string>
+    <string name="preferences_fbaudience_status_key">FBAUDIENCE_STATUS_KEY</string>
+</resources>

@@ -1,15 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Flavors Example</string>
-    <string name="logo_admob_description">AdMob logo</string>
-    <string name="logo_fbaudience_description">FBAudience logo</string>
-    <string name="logo_adcolony_description">AdColony logo</string>
-    <string name="no_network_data">Sin registrar hasta ahora</string>
-    <string name="network_data">Último registro: %s</string>
-
-    <!-- Keys for SharedPreferences -->
-    <string name="preferences_admob_status_key">ADMOB_STATUS_KEY</string>
-    <string name="preferences_adcolony_status_key">ADCOLONY_STATUS_KEY</string>
-    <string name="preferences_fbaudience_status_key">FBAUDIENCE_STATUS_KEY</string>
-    <string name="registered">REGISTRADA</string>
 </resources>

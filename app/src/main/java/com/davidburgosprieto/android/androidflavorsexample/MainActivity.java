@@ -1,16 +1,19 @@
 package com.davidburgosprieto.android.androidflavorsexample;
 
 import android.graphics.Typeface;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.davidburgosprieto.android.androidflavorsexample.Ad;
 import com.davidburgosprieto.android.androidflavorsexample.utils.MyPreferences;
 
-import static com.davidburgosprieto.android.androidflavorsexample.Utils.Constants.*;
+import static com.davidburgosprieto.android.androidflavorsexample.Constants.BUILD_TYPE;
+import static com.davidburgosprieto.android.androidflavorsexample.utils.MyBuildTypes.BUILD_TYPE_ADCOLONY;
+import static com.davidburgosprieto.android.androidflavorsexample.utils.MyBuildTypes.BUILD_TYPE_ADMOB;
+import static com.davidburgosprieto.android.androidflavorsexample.utils.MyBuildTypes.BUILD_TYPE_FBAUDIENCE;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     /* ************** */
 
     /**
-     * Initialises the global SharedPrefences object.
+     * Initialises the global SharedPreferences object.
      */
     private void initPreferences() {
         mPreferences = new MyPreferences(this);
@@ -59,22 +62,28 @@ public class MainActivity extends AppCompatActivity {
      * Initialises the TextView with the status of every network.
      */
     private void getNetworkSatus() {
+        // Get custom network status strings, depending on the values stored on SharedPreferences.
+        String adcolonyStatus = getStatus(mPreferences.getNetworkStatus(BUILD_TYPE_ADCOLONY));
+        String admobStatus = getStatus(mPreferences.getNetworkStatus(BUILD_TYPE_ADMOB));
+        String fbaudienceStatus = getStatus(mPreferences.getNetworkStatus(BUILD_TYPE_FBAUDIENCE));
+
+        // Display the corresponding status strings, depending on the current build type.
         switch (BUILD_TYPE) {
-            case 1: // AdColony.
+            case BUILD_TYPE_ADCOLONY:
                 showRegistered(mAdColonyCardView, mAdColonyTextView);
-                showUnregistered(mAdMobCardView, mAdMobTextView, getStatus(mPreferences.getAdMobStatus()));
-                showUnregistered(mFBAudienceCardView, mFBAudienceTextView, getStatus(mPreferences.getFBAudienceStatus()));
+                showUnregistered(mAdMobCardView, mAdMobTextView, admobStatus);
+                showUnregistered(mFBAudienceCardView, mFBAudienceTextView, fbaudienceStatus);
                 break;
 
-            case 2: // AdMob.
-                showUnregistered(mAdColonyCardView, mAdColonyTextView, getStatus(mPreferences.getAdColonyStatus()));
+            case BUILD_TYPE_ADMOB:
+                showUnregistered(mAdColonyCardView, mAdColonyTextView, adcolonyStatus);
                 showRegistered(mAdMobCardView, mAdMobTextView);
-                showUnregistered(mFBAudienceCardView, mFBAudienceTextView, getStatus(mPreferences.getFBAudienceStatus()));
+                showUnregistered(mFBAudienceCardView, mFBAudienceTextView, fbaudienceStatus);
                 break;
 
-            case 3: // FBAudience.
-                showUnregistered(mAdColonyCardView, mAdColonyTextView, getStatus(mPreferences.getAdColonyStatus()));
-                showUnregistered(mAdMobCardView, mAdMobTextView, getStatus(mPreferences.getAdMobStatus()));
+            case BUILD_TYPE_FBAUDIENCE:
+                showUnregistered(mAdColonyCardView, mAdColonyTextView, adcolonyStatus);
+                showUnregistered(mAdMobCardView, mAdMobTextView, admobStatus);
                 showRegistered(mFBAudienceCardView, mFBAudienceTextView);
         }
     }
@@ -87,11 +96,13 @@ public class MainActivity extends AppCompatActivity {
      * string otherwise.
      */
     private String getStatus(String status) {
+        String customStatus;
         if (status.equals("")) {
-            return getString(R.string.no_network_data);
+            customStatus = getString(R.string.no_network_data);
         } else {
-            return getString(R.string.network_data, status);
+            customStatus = getString(R.string.network_data, status);
         }
+        return customStatus + '\n' + getString(R.string.click_to_save);
     }
 
     /**
@@ -102,7 +113,8 @@ public class MainActivity extends AppCompatActivity {
      */
     private void showRegistered(CardView cardView, TextView textView) {
         // Writes "Registered" String using bold text style.
-        textView.setText(getString(R.string.registered));
+        String status = getString(R.string.registered) + '\n' + getString(R.string.click_to_save);
+        textView.setText(status);
         textView.setTypeface(null, Typeface.BOLD);
 
         // Sets CardView alpha to 1, so it looks totally opaque.
@@ -126,64 +138,59 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Register to the current ad network and updates the registration status.
+     * Register to the current ad network.
      */
     private void registerAdNetwork() {
-        // Initialise ad network and create a new interstitial objetc.
+        // Initialise ad network and create a new interstitial object.
         mAd = new Ad(this);
-        mAd.createInterstitialAd();
-
-        // Save network registration status in preferences depending in the BUILD_TYPE constant,
-        // given by the current compilation flavor.
-        switch (BUILD_TYPE) {
-            case 1: // AdColony.
-                mPreferences.setAdColonyStatus();
-                break;
-
-            case 2: // AdMob.
-                mPreferences.setAdMobStatus();
-                break;
-
-            case 3: // FBAudience.
-                mPreferences.setFBAudienceStatus();
-        }
     }
 
-    // BORRAR. ES SÓLO PARA PROBAR.
+    /**
+     * Add listeners to every CardView depending on the build type. When user clicks on the CardView
+     * related to the current build type, save network status and show a "Registered" message;
+     * otherwise, don't save status and show a "Not registered" message.
+     */
     private void setListeners() {
-        View.OnClickListener listener = new View.OnClickListener() {
+        // Listener to add to the CardView related to the current build type.
+        View.OnClickListener registeredNetworkListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Save current status network.
+                mPreferences.setNetworkStatus(BUILD_TYPE);
+                Toast.makeText(MainActivity.this, R.string.toast_registered, Toast.LENGTH_SHORT).show();
+
+                // For testing only.
                 mAd.showInterstitialAd();
             }
         };
 
+        // Listener to add to the CardViews that are not related to the current build type.
+        View.OnClickListener notRegisteredNetworkListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Raise a "Not registered" message.
+                Toast.makeText(MainActivity.this, R.string.toast_not_registered, Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        // Add the corresponding listeners depending on the build type.
         switch (BUILD_TYPE) {
-            case 1:
-                mAdMobCardView.setOnClickListener(listener);
+            case BUILD_TYPE_ADCOLONY:
+                mAdColonyCardView.setOnClickListener(registeredNetworkListener);
+                mAdMobCardView.setOnClickListener(notRegisteredNetworkListener);
+                mFBAudienceCardView.setOnClickListener(notRegisteredNetworkListener);
                 break;
 
-            case 2:
-                mAdMobCardView.setOnClickListener(listener);
+            case BUILD_TYPE_ADMOB:
+                mAdColonyCardView.setOnClickListener(notRegisteredNetworkListener);
+                mAdMobCardView.setOnClickListener(registeredNetworkListener);
+                mFBAudienceCardView.setOnClickListener(notRegisteredNetworkListener);
                 break;
 
-            case 3:
-                mAdMobCardView.setOnClickListener(listener);
+            case BUILD_TYPE_FBAUDIENCE:
+                mAdColonyCardView.setOnClickListener(notRegisteredNetworkListener);
+                mAdMobCardView.setOnClickListener(notRegisteredNetworkListener);
+                mFBAudienceCardView.setOnClickListener(registeredNetworkListener);
         }
     }
-
-
-/*    private void setFBAudience() {
-        // Create the interstitial unit with a placement ID (generate your own on the Facebook app settings).
-        // Use different ID for each ad placement in your app.
-        mInterstitialAd = new InterstitialAd(
-                this,
-                "YOUR_PLACEMENT_ID");
-
-        // Set a listener to get notified on changes or when the user interact with the ad.
-        //mInterstitialAd.setAdListener(this);
-
-        // Load a new interstitial.
-        mInterstitialAd.loadAd(EnumSet.of(CacheFlag.VIDEO));
-    }*/
 }

@@ -7,12 +7,23 @@ import android.content.res.Resources;
 import com.davidburgosprieto.android.androidflavorsexample.R;
 
 import static android.preference.PreferenceManager.getDefaultSharedPreferences;
+import static com.davidburgosprieto.android.androidflavorsexample.utils.MyBuildTypes.BUILD_TYPE_ADCOLONY;
+import static com.davidburgosprieto.android.androidflavorsexample.utils.MyBuildTypes.BUILD_TYPE_ADMOB;
+import static com.davidburgosprieto.android.androidflavorsexample.utils.MyBuildTypes.BUILD_TYPE_FBAUDIENCE;
 import static com.davidburgosprieto.android.androidflavorsexample.utils.MyDateTime.getStringCurrentDate;
 
 public class MyPreferences {
 
+    /* ************************ */
+    /* Private member variables */
+    /* ************************ */
+
     private SharedPreferences mSharedPreferences;
     private Resources mResources;
+
+    /* ************ */
+    /* Constructors */
+    /* ************ */
 
     /**
      * Constructor for objects of this class.
@@ -29,73 +40,50 @@ public class MyPreferences {
     /* ************** */
 
     /**
-     * Fetches SharedPreferences for the last saved status of the connection to the AdColony
-     * network.
+     * Fetches SharedPreferences for the last saved network connection status, given by the build
+     * type parameter.
      *
-     * @return a string containing the last saved status of the connection to the AdColony network.
-     */
-    public String getAdColonyStatus() {
-        String key = mResources.getString(R.string.preferences_adcolony_status_key);
-        return mSharedPreferences.getString(key, "");
-    }
-
-    /**
-     * Fetches SharedPreferences for the last saved status of the connection to the AdMob network.
-     *
-     * @return a string containing the last saved status of the connection to the AdMob network.
-     */
-    public String getAdMobStatus() {
-        String key = mResources.getString(R.string.preferences_admob_status_key);
-        return mSharedPreferences.getString(key, "");
-    }
-
-    /**
-     * Fetches SharedPreferences for the last saved status of the connection to the FBAudience
-     * network.
-     *
+     * @param buildType is the current build type that determines the current ad network.
      * @return a string containing the last saved status of the connection to the FBAudience
      * network.
      */
-    public String getFBAudienceStatus() {
-        String key = mResources.getString(R.string.preferences_fbaudience_status_key);
-        return mSharedPreferences.getString(key, "");
+    public String getNetworkStatus(int buildType) {
+        return mSharedPreferences.getString(getKey(buildType), "");
     }
 
     /**
-     * Helper method to update the last saved status of the connection to the AdColony network.
+     * Public method to update the current network connection status, given by the build type
+     * parameter, to the current date and time.
+     *
+     * @param buildType is the current build type that determines the current ad network.
      */
-    public void setAdColonyStatus() {
-        String key = mResources.getString(R.string.preferences_adcolony_status_key);
-        setCurrentStatus(key);
-    }
-
-    /**
-     * Helper method to update the last saved status of the connection to the AdMob network.
-     */
-    public void setAdMobStatus() {
-        String key = mResources.getString(R.string.preferences_admob_status_key);
-        setCurrentStatus(key);
-    }
-
-    /**
-     * Helper method to update the last saved status of the connection to the FBAudience network.
-     */
-    public void setFBAudienceStatus() {
-        String key = mResources.getString(R.string.preferences_fbaudience_status_key);
-        setCurrentStatus(key);
-    }
-
-    /* *************** */
-    /* Private methods */
-    /* *************** */
-
-    /**
-     * @param key is the shared preferences key for saving the current status to the current date
-     *            and time.
-     */
-    private void setCurrentStatus(String key) {
+    public void setNetworkStatus(int buildType) {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putString(key, getStringCurrentDate());
+        editor.putString(getKey(buildType), getStringCurrentDate());
         editor.apply();
+    }
+
+    /* ********************** */
+    /* Private helper methods */
+    /* ********************** */
+
+    /**
+     * Returns the corresponding SharedPreferences key depending on the build type parameter.
+     *
+     * @param buildType is the current build type that determines the current ad network.
+     * @return a String SharedPreferences key.
+     */
+    private String getKey(int buildType) {
+        switch (buildType) {
+            case BUILD_TYPE_ADCOLONY:
+                return mResources.getString(R.string.preferences_adcolony_status_key);
+
+            case BUILD_TYPE_ADMOB:
+                return mResources.getString(R.string.preferences_admob_status_key);
+
+            case BUILD_TYPE_FBAUDIENCE:
+            default:
+                return mResources.getString(R.string.preferences_fbaudience_status_key);
+        }
     }
 }

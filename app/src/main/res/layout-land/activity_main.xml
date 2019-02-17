@@ -23,7 +23,7 @@
             <TextView
                 android:id="@+id/adcolony_textview"
                 style="@style/TextViewStyle"
-                tools:text="REGISTRADA" />
+                tools:text="REGISTRADA\nClic aquí para guardar el estado." />
         </LinearLayout>
     </android.support.v7.widget.CardView>
 
@@ -44,7 +44,7 @@
             <TextView
                 android:id="@+id/admob_textview"
                 style="@style/TextViewStyle"
-                tools:text="Último registro: 12/02/2019 12:33" />
+                tools:text="Último registro: 12/02/2019 12:33\nClic aquí para guardar el estado." />
         </LinearLayout>
     </android.support.v7.widget.CardView>
 
@@ -64,7 +64,7 @@
             <TextView
                 android:id="@+id/fbaudience_textview"
                 style="@style/TextViewStyle"
-                tools:text="Último registro: 12/02/2019 12:33" />
+                tools:text="Último registro: 12/02/2019 12:33\nClic aquí para guardar el estado." />
         </LinearLayout>
     </android.support.v7.widget.CardView>
 

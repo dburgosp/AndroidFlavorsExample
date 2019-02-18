@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="logo_admob_description">AdMob logo</string>
+    <string name="app_name">Flavors Library</string>    <string name="logo_admob_description">AdMob logo</string>
     <string name="logo_fbaudience_description">FBAudience logo</string>
     <string name="logo_adcolony_description">AdColony logo</string>
     <string name="no_network_data">No hay datos de registro a esta red.</string>

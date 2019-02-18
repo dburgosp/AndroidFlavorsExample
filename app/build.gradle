@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.example.android.flavorsexample"
+        applicationId "es.miotek.flavorsexample"
         minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
@@ -15,21 +15,22 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
     }
 
-    flavorDimensions "adnetworkApp"
+    flavorDimensions "adnetwork"
     productFlavors {
-        adcolonyApp {
-            dimension "adnetworkApp"
-            applicationId "com.example.android.flavorsexample.adcolonyApp"
+        adcolony {
+            dimension "adnetwork"
         }
-        admobApp {
-            dimension "adnetworkApp"
-            applicationId "com.example.android.flavorsexample.admobApp"
+        admob {
+            dimension "adnetwork"
         }
-        fbaudienceApp {
-            dimension "adnetworkApp"
-            applicationId "com.example.android.flavorsexample.fbaudienceApp"
+        fbaudience {
+            dimension "adnetwork"
         }
     }
 }
@@ -39,15 +40,12 @@ ext {
 }
 
 configurations {
-    adcolonyAppReleaseImplementation
-    admobAppReleaseImplementation
-    fbaudienceAppReleaseImplementation
+    adcolonyDebugImplementation
+    admobDebugImplementation
+    fbaudienceDebugImplementation
 }
 
 dependencies {
-    adcolonyAppReleaseImplementation project(path: ':flavorslibrary', configuration: 'adcolonyRelease')
-    admobAppReleaseImplementation project(path: ':flavorslibrary', configuration: 'admobRelease')
-    fbaudienceAppImplementation project(path: ':flavorslibrary', configuration: 'fbaudienceRelease')
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "com.android.support:appcompat-v7:" + supportVersion
     implementation "com.android.support:cardview-v7:" + supportVersion
@@ -56,5 +54,5 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation project(path: ':flavorslibrary', configuration: 'default')
+    implementation project(':flavorslibrary')
 }

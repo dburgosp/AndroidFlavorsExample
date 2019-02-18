@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.android.flavorslibrary">
+    package="es.miotek.flavorslibrary" >
 
     <uses-permission android:name="android.permission.INTERNET" />
 </manifest>
